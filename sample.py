@@ -64,9 +64,9 @@ def registrationTab():
 
 
     lblTotal = Label(lblF1, text="Overall Total Cost:", font=("Segoe UI", 10, "bold"))
-    lblTotal.place(relx=0.62, rely=0.85)
+    lblTotal.place(relx=0.62, rely=0.885)
     txtOver = Entry(lblF1, font=("Segoe UI", 12), width=13)
-    txtOver.place(relx=0.81, rely=0.835)
+    txtOver.place(relx=0.81, rely=0.87)
 
 
     #Treeview
@@ -88,7 +88,7 @@ def registrationTab():
 
     # Add Data
     tv.insert(parent='', index='end', iid=0, text='', values="")
-    tv.place(relwidth=0.96, relheight=0.82, relx=0.02, rely=0)
+    tv.place(relwidth=0.96, relheight=0.82, relx=0.02, rely=0.03)
 
 def consumptionTab():
     lbltitle = Label(total, text="TRACK YOUR CONSUMPTION", font=("Segoe UI", 24, "underline"))
