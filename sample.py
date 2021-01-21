@@ -21,6 +21,11 @@ tabControl.add(home, text='Home')
 tabControl.add(registration, text='Daily Registration')
 tabControl.add(total, text='Track Consumption')
 
+def hometab():
+    lblHome = Label(home,text="HOME", font=("Segoe UI", 40),relief="raised")
+    lblHome.place(relx=0.5, rely=0.2)
+
+
 def registrationTab():
     lbltitle = Label(registration, text="DEVICE REGISTRATION", font=("Segoe UI", 24, "underline"))
     lbltitle.place(rely=0.02, relx=0.28)
@@ -59,12 +64,12 @@ def registrationTab():
     # Note
     lblNote = Label(registration,
                     text="Note: Please go to Home Tab and click 'help' button to see the average rate of consumption of every devices.",
-                    font=("Segoe UI", 8))
+                    font=("Segoe UI", 8), relief="sunken")
     lblNote.place(relx=0.02, rely=0.345)
 
 
-    lblTotal = Label(lblF1, text="Overall Total Cost:", font=("Segoe UI", 10, "bold"))
-    lblTotal.place(relx=0.62, rely=0.885)
+    lblTotal = Label(lblF1, text="Total Cost:", font=("Segoe UI", 10, "bold"))
+    lblTotal.place(relx=0.7, rely=0.885)
     txtOver = Entry(lblF1, font=("Segoe UI", 12), width=13)
     txtOver.place(relx=0.81, rely=0.87)
 
@@ -72,19 +77,19 @@ def registrationTab():
     #Treeview
     tv = ttk.Treeview(lblF1)
     # Define columns
-    tv['columns'] = ("Wattage", "No. of Hours Used", "Total Cost")
+    tv['columns'] = ("Wattage", "No. of Hours Used", "Cost")
 
     # Format Columns
     tv.column("#0", width=120, minwidth=25)
     tv.column("Wattage", width=50, anchor=CENTER)
     tv.column("No. of Hours Used", width=80, anchor=CENTER)
-    tv.column("Total Cost", width=80, anchor=E)
+    tv.column("Cost", width=80, anchor=E)
 
     # Create Headings
     tv.heading("#0", text="Device/s")
     tv.heading("Wattage", text="Wattage")
     tv.heading("No. of Hours Used", text="No. of Hours Used")
-    tv.heading("Total Cost", text="Total Cost")
+    tv.heading("Cost", text="Cost")
 
     # Add Data
     tv.insert(parent='', index='end', iid=0, text='', values="")
@@ -131,19 +136,19 @@ def consumptionTab():
     #treeview
     tv1 = ttk.Treeview(fr)
     # Define columns
-    tv1['columns'] = ("Wattage", "No. of Hours Used", "Total Cost")
+    tv1['columns'] = ("Wattage", "No. of Hours Used", "Cost")
 
     # Format Columns
     tv1.column("#0", width=120, minwidth=25)
     tv1.column("Wattage", width=50, anchor=CENTER)
     tv1.column("No. of Hours Used", width=80, anchor=CENTER)
-    tv1.column("Total Cost", width=80, anchor=E)
+    tv1.column("Cost", width=80, anchor=E)
 
     # Create Headings
     tv1.heading("#0", text="Device/s")
     tv1.heading("Wattage", text="Wattage")
     tv1.heading("No. of Hours Used", text="No. of Hours Used")
-    tv1.heading("Total Cost", text="Total Cost")
+    tv1.heading("Cost", text="Cost")
 
     # Add Data
     tv1.insert(parent='', index='end', iid=0, text='', values="")
@@ -167,6 +172,8 @@ def start ():
 
     # Track Consumption Tab
     consumptionTab()
+
+    hometab()
 
 
 # application start
