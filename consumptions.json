@@ -1,0 +1,33 @@
+{
+	"consumptions": [
+		{
+      "": "",
+			"device": "Celphone",
+			"wattage": 5,
+			"hour": 6,
+			"rate": 12,
+			"cost": 0.9
+		},
+		{
+			"device": "Computer",
+			"wattage": 90,
+			"hour": 7,
+			"rate": 8.47,
+			"cost": 5.33
+		},
+		{
+			"device": "Electricpan",
+			"wattage": 80,
+			"hour": 8,
+			"rate": 12,
+			"cost": 3.45
+		},
+		{
+			"device": "LED",
+			"wattage": 11,
+			"hour": 10,
+			"rate": 12,
+			"cost": 3.00
+		}
+	]
+}
