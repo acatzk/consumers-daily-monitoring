@@ -136,16 +136,18 @@ def consumptionTab():
     #treeview
     tv1 = ttk.Treeview(fr)
     # Define columns
-    tv1['columns'] = ("Wattage", "No. of Hours Used", "Cost")
+    tv1['columns'] = ("Device/s", "Wattage", "No. of Hours Used", "Cost")
 
     # Format Columns
-    tv1.column("#0", width=120, minwidth=25)
-    tv1.column("Wattage", width=50, anchor=CENTER)
-    tv1.column("No. of Hours Used", width=80, anchor=CENTER)
-    tv1.column("Cost", width=80, anchor=E)
+    tv1.column("#0", width=110, minwidth=25)
+    tv1.column("Device/s", width=120, anchor=W)
+    tv1.column("Wattage", width=40, anchor=CENTER)
+    tv1.column("No. of Hours Used", width=90, anchor=CENTER)
+    tv1.column("Cost", width=60, anchor=E)
 
     # Create Headings
-    tv1.heading("#0", text="Device/s")
+    tv1.heading("#0", text="Date")
+    tv1.heading("Device/s", text="Device/s")
     tv1.heading("Wattage", text="Wattage")
     tv1.heading("No. of Hours Used", text="No. of Hours Used")
     tv1.heading("Cost", text="Cost")
@@ -155,12 +157,6 @@ def consumptionTab():
     tv1.place(relwidth=0.96, relheight=0.8, relx=0.02, rely=0.03)
 
 
-    # StringVar
-    # From_Date = StringVar()
-    # to = StringVar()
-
-    # cal1 = Calendar(total, selectmode="day", year=2021, month=1, day=20, date_pattern= "dd/mm/y", font=('arial', 16, 'bold'))
-    # cal1.grid(row=0, column=0, padx=10)
 
 # start method
 def start ():

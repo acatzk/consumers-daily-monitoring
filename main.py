@@ -1,45 +1,48 @@
+import requests
 from tkinter import *
-from tkinter import ttk
-import tkinter as tk
 
 
-root = Tk()
-root.title("Electric Billing System")
-root.geometry('1050x720')
+def weather():
+    city = city_listbox.get()
+    url = "https://api.openweathermap.org/data/2.5/weather?q={}&appid=1818973441ac40aa99aa3d5aa227e48f".format(city)
+    res = requests.get(url)
+    output = res.json()
+
+    weather_status = output['weather'][0]['description']
+    temprature = output['main']['temp']
+    humidity = output['main']['humidity']
+    wind_speed = output['wind']['speed']
+
+    weather_status_label.configure(text="weather status : " + weather_status)
+    temprature_label.configure(text="temprature : " + str(temprature))
+    humidity_label.configure(text="Humidity : " + str(humidity))
+    wind_speed_label.configure(text="wind speed  : " + str(wind_speed))
 
 
-# Tab Control
-tabControl = ttk.Notebook(root)
-tabControl.pack(fill="both", expand=1)
+window = Tk()
+window.geometry("400x350")
 
-home = tk.Frame(tabControl,background="#323743", width=1000, height= 680)
-registration = tk.Frame(tabControl, background="#323743", width=1000, height= 680)
-total = tk.Frame(tabControl, background="#323743", width=1000, height= 680)
+city_name_list = ["Ormoc", "Maasin", "Sogod", "Baybay", "Baybay","Baybay", "Baybay", "Baybay", "Baybay", "Baybay",
+                  "Baybay", "Baybay", "Baybay", "Baybay", "Baybay", "Baybay", "Baybay", "Baybay"]
 
-home.pack(fill="both", expand=1)
-registration.pack(fill="both", expand=1)
-total.pack(fill="both", expand=1)
+city_listbox = StringVar(window)
+city_listbox.set("select the city")
+option = OptionMenu(window, city_listbox, *city_name_list)
+option.place(relx=0.325, rely=0.09, width=150)
 
+b1 = Button(window, text="CHECK", width=6, command=weather)
+b1.place(relx=0.415, rely= 0.23)
 
-tabControl.add(home, text='Home')
-tabControl.add(registration, text='Daily Registration')
-tabControl.add(total, text='Total Consumption')
+weather_status_label = Label(window, font=("times", 10, "bold"))
+weather_status_label.place(relx=0.3, rely=0.4)
 
+temprature_label = Label(window, font=("times", 10, "bold"))
+temprature_label.place(relx=0.3, rely=0.5)
 
+humidity_label = Label(window, font=("times", 10, "bold"))
+humidity_label.place(relx=0.3, rely=0.6)
 
-# Registration Elements
-account_no = tk.Label(registration, text="Account Number:", font=("Segoe UI", 10)).grid(column=0, row=0, columnspan=1, padx=10, pady=25)
-e_account = ttk.Entry(registration, width = 20).grid(row=0, column=1)
-meter_no = tk.Label(registration, text="Meter Number:", font=("Segoe UI", 10)).grid(column=2, row=0, padx=10, pady=10)
-e_meter = ttk.Entry(registration, width = 20).grid(row=0, column=3)
-first = ttk.Label(registration, text="First Name:", font=("Segoe UI", 10)).grid(column=0, row=1, padx= 10, pady= 10)
-e_first = ttk.Entry(registration, width = 20).grid(row=1, column=1)
-middle = ttk.Label(registration, text="Middle Name:", font=("Segoe UI", 10)).grid(column=2, row=1, padx=10, pady=10)
-e_middle = ttk.Entry(registration, width = 20).grid(row=1, column=3)
-last = ttk.Label(registration, text="Last Name:", font=("Segoe UI", 10)).grid(column=4, row=1, padx=10, pady=10)
-e_last = ttk.Entry(registration, width = 20).grid(row=1, column=5)
-address = ttk.Label(registration, text="Address:", font=("Segoe UI", 10), width= 8, anchor= CENTER).grid(column=0, row=2, padx=10, pady=10)
-e_address = ttk.Entry(registration, width = 70).grid(row=2, column=0, columnspan= 6)
-meter_no = ttk.Label(registration, text="Address:", font=("Segoe UI", 10), width= 8, anchor= CENTER).grid(column=0, row=2, padx=10, pady=10)
+wind_speed_label = Label(window, font=("times", 10, "bold"))
+wind_speed_label.place(relx=0.3, rely=0.7)
 
-root.mainloop()
+window.mainloop()
