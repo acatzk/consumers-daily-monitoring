@@ -59,10 +59,13 @@ def getConsumptionData (tv):
               index='end', 
               iid=consume, 
               text=consume['device'], 
-              values=(consume['wattage'], consume['hour'], "₱ " + str(consume['cost'])))
+              values=(consume['wattage'], 
+                      str(consume['time']['hours']) + ':' + str(consume['time']['minutes']), 
+                      "₱ " + str(consume['cost'])))
   tv.place(relwidth=0.96, relheight=0.82, relx=0.02, rely=0.03)
   return tv
-  
+
+# ===== BOOLEAN VALIDATION ======
 def validation ():
   value = FALSE
   d = device.get()
@@ -87,6 +90,14 @@ def onRegister ():
       messagebox.showinfo("Title", "GOod job!!")
   except:
     messagebox.showerror(title="Something went wrong!", message="Invalid inputs")
+
+# ===== ON CANCEL REGISTRATION FIELDS ======
+def onCancel ():
+  device.set('')
+  wattage.set(0.0)
+  hour.set(0)
+  rate.set(0.0)
+
 
 def hometab():
     lblHome = Label(home,text="HOME", font=("Segoe UI", 40),relief="raised")
@@ -115,7 +126,7 @@ def registrationTab():
     Entry(registration, textvar=rate, font=("Segoe UI", 12), width=10).place(relx=0.845, rely=0.195)
 
     Button(registration, padx=2, pady=3, font=('arial', 12), width=6, text="SAVE", bd=2, bg="#b5b5b5", command=onRegister).place(relx=0.75, rely=0.31) # REGISTRATION BUTTON
-    Button(registration, padx=2, pady=3, font=('arial', 12), width=6, text="CLEAR", bd=2, bg="#b5b5b5").place(relx=0.85, rely=0.31) # CANCEL BUTTON
+    Button(registration, padx=2, pady=3, font=('arial', 12), width=6, text="CANCEL", bd=2, bg="#b5b5b5", command=onCancel).place(relx=0.85, rely=0.31) # CANCEL BUTTON
 
     # Note
     lblNote = Label(registration,
