@@ -7,14 +7,19 @@ import json
 
 root = Tk()
 
-
 root.title("Consumer's Daily Electric Consumption Monitoring Software")
 root.minsize(width=1050, height=720)
 
-
+# ========== import json data ==========
 with open('consumptions.json') as c:
   data = json.load(c)
 
+# ========== INPUT VARAIBLES ==========
+device = StringVar()
+wattage = DoubleVar()
+hour = IntVar()
+rate = DoubleVar()
+cost = DoubleVar()
 
 # ========== GET TOTAL COST FUNCTION =============
 def getTotalCost():
@@ -22,11 +27,22 @@ def getTotalCost():
   for consume in data['consumptions']:
     total += consume['cost']
   return total
-# END GET TOTAL COST
 
 # ========== GET CONSUMPTION DATA FUNCTION =============
-
 def getConsumptionData (tv):
+  tv['columns'] = ("Wattage", "No. of Hours Used", "Cost")
+
+  # Format Columns
+  tv.column("#0", width=50, anchor=CENTER)
+  tv.column("Wattage", width=50, anchor=CENTER)
+  tv.column("No. of Hours Used", width=80, anchor=CENTER)
+  tv.column("Cost", width=80, anchor=CENTER)
+
+  # Create Headings
+  tv.heading("#0", text="Device/s")
+  tv.heading("Wattage", text="Wattage")
+  tv.heading("No. of Hours Used", text="No. of Hours Used")
+  tv.heading("Cost", text="Cost")
   for consume in data['consumptions']:
     tv.insert(parent='', 
               index='end', 
@@ -36,7 +52,6 @@ def getConsumptionData (tv):
   tv.place(relwidth=0.96, relheight=0.82, relx=0.02, rely=0.03)
   return tv
 
-# END CONSUMPTION DATA FUNCTION
 
 tabControl = ttk.Notebook(root)
 tabControl.pack(fill="both", expand=1)
@@ -69,33 +84,33 @@ lblF1 = LabelFrame(registration, text="LIST OF APPLIANCES USED TODAY", font=("Se
                   bg="#b5b5b5")
 lblF1.place(relwidth=0.96, relheight=0.57, relx=0.02, rely=0.40)
 
-lblApp = Label(registration, text="Device Name:", font=("Segoe UI", 10)).place(relx=0.02, rely=.2)
-lblWatt = Label(registration, text="Wattage:", font=("Segoe UI", 10)).place(relx=0.32, rely=.2)
-lblHour = Label(registration, text="Hours Used:", font=("Segoe UI", 10)).place(relx=0.535, rely=.2)
-lblRate = Label(registration, text="KWH Rate:", font=("Segoe UI", 10)).place(relx=0.75, rely=.2)
-
-txtApp = Entry(registration, font=("Segoe UI", 11), width=15).place(relx=0.14, rely=0.195)
-txtWatt = Entry(registration, font=("Segoe UI", 12), width=10).place(relx=0.40, rely=0.195)
-txtHour = Entry(registration, font=("Segoe UI", 12), width=8).place(relx=0.64, rely=0.195)
-txtRate = Entry(registration, font=("Segoe UI", 12), width=10).place(relx=0.845, rely=0.195)
+Label(registration, text="Device Name:", font=("Segoe UI", 10)).place(relx=0.02, rely=.2)
+Label(registration, text="Wattage:", font=("Segoe UI", 10)).place(relx=0.32, rely=.2)
+Label(registration, text="Hours Used:", font=("Segoe UI", 10)).place(relx=0.535, rely=.2)
+Label(registration, text="KWH Rate:", font=("Segoe UI", 10)).place(relx=0.75, rely=.2)
 
 
-btnSave = Button( registration, 
-                  padx=2, 
-                  pady=3, 
-                  width=6, 
-                  text="SAVE", 
-                  bd=2, 
-                  bg="#b5b5b5").place(relx=0.75, rely=0.31)
+def onRegister():
+  try:
+    d = device.get()
+    w = wattage.get()
+    h = hour.get()
+    r = rate.get()
+    c = cost.get()
+    
+    messagebox.showinfo("Title", "Device: " + str(d) + " Wattage: " + str(w))
+    print(d)
+    
+  except Exception:
+    messagebox.showerror(title="Something went wrong!", message="Error: invalid inputs")
 
-Button( registration, 
-        padx=2, 
-        pady=3, 
-        font=('arial', 12), 
-        width=6, 
-        text="CLEAR", 
-        bd=2, 
-        bg="#b5b5b5").place(relx=0.85, rely=0.31)
+Entry(registration, textvar=device, font=("Segoe UI", 11), width=15).place(relx=0.14, rely=0.195)
+Entry(registration, textvar=wattage, font=("Segoe UI", 12), width=10).place(relx=0.40, rely=0.195)
+Entry(registration, textvar=hour, font=("Segoe UI", 12), width=8).place(relx=0.64, rely=0.195)
+Entry(registration, textvar=rate, font=("Segoe UI", 12), width=10).place(relx=0.845, rely=0.195)
+
+Button(registration, padx=2, pady=3, width=6, text="SAVE", bd=2, bg="#b5b5b5", command=onRegister).place(relx=0.75, rely=0.31)
+Button(registration, padx=2, pady=3, width=6, text="CANCEL", bd=2, bg="#b5b5b5").place(relx=0.85, rely=0.31)
 
 
 # Note
@@ -111,23 +126,8 @@ txtOverall = Entry(lblF1, width=13, text='text')
 txtOverall.insert(0, getTotalCost())
 txtOverall.place(relx=0.81, rely=0.87)
 
-#Treeview
+# ===== Treeview ========
 tv = ttk.Treeview(lblF1)
-# Define columns
-tv['columns'] = ("Wattage", "No. of Hours Used", "Cost")
-
-# Format Columns
-tv.column("#0", width=50, anchor=CENTER)
-tv.column("Wattage", width=50, anchor=CENTER)
-tv.column("No. of Hours Used", width=80, anchor=CENTER)
-tv.column("Cost", width=80, anchor=CENTER)
-
-# Create Headings
-tv.heading("#0", text="Device/s")
-tv.heading("Wattage", text="Wattage")
-tv.heading("No. of Hours Used", text="No. of Hours Used")
-tv.heading("Cost", text="Cost")
-
 getConsumptionData(tv)
 
 
@@ -193,6 +193,7 @@ tv1.heading("Cost", text="Cost")
 tv1.insert(parent='', index='end', iid=0, text='', values="")
 tv1.place(relwidth=0.96, relheight=0.8, relx=0.02, rely=0.03)
 # END CONSUMPTION TAB
+
 
 
 # application start
