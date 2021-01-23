@@ -31,7 +31,6 @@ device = StringVar()
 wattage = DoubleVar()
 hour = IntVar()
 rate = DoubleVar()
-cost = DoubleVar()
 
 # ========== GET TOTAL COST FUNCTION =============
 def getTotalCost():
@@ -64,6 +63,19 @@ def getConsumptionData (tv):
   tv.place(relwidth=0.96, relheight=0.82, relx=0.02, rely=0.03)
   return tv
   
+def validation ():
+  value = FALSE
+  d = device.get()
+  w = wattage.get()
+  h = hour.get()
+  r = rate.get()
+
+  if d == '' or (w == 0.00 or w == '') or (h == 0  or h ==  '')or (r == 0 or h == ''):
+    messagebox.showinfo("Title", "All fields required!")
+    value = FALSE
+  else:
+    value = TRUE
+  return value
 
 # ==== ON REGISTRATION DEVICE =====
 def onRegister ():
@@ -72,13 +84,11 @@ def onRegister ():
     w = wattage.get()
     h = hour.get()
     r = rate.get()
-    c = cost.get()
     
-    messagebox.showinfo("Title", "Device: " + str(d) + " Wattage: " + str(w))
-    print(d)
-    
-  except Exception:
-    messagebox.showerror(title="Something went wrong!", message="Error: invalid inputs")
+    if validation():
+      messagebox.showinfo("Title", "GOod job!!")
+  except:
+    messagebox.showerror(title="Something went wrong!", message="Invalid inputs")
 
 def hometab():
     lblHome = Label(home,text="HOME", font=("Segoe UI", 40),relief="raised")
