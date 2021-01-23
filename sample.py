@@ -69,7 +69,6 @@ def validation ():
   w = wattage.get()
   h = hour.get()
   r = rate.get()
-
   if d == '' or (w == 0.00 or w == '') or (h == 0  or h ==  '')or (r == 0 or h == ''):
     messagebox.showinfo("Title", "All fields required!")
     value = FALSE
@@ -84,7 +83,6 @@ def onRegister ():
     w = wattage.get()
     h = hour.get()
     r = rate.get()
-    
     if validation():
       messagebox.showinfo("Title", "GOod job!!")
   except:
@@ -130,6 +128,7 @@ def registrationTab():
     lblTotal.place(relx=0.7, rely=0.885)
     txtOverall = Entry(lblF1, font=("Segoe UI", 12), width=13)
     txtOverall.insert(0, getTotalCost())
+    txtOverall.configure(state=tk.DISABLED)
     txtOverall.place(relx=0.81, rely=0.87)
 
 
