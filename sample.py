@@ -34,10 +34,11 @@ hour = IntVar()
 rate = DoubleVar()
 
 # ========== GET TOTAL COST FUNCTION =============
-def getTotalCost():
+def getTotalCost(current_date):
   total = 0.00
   for consume in data['consumptions']:
-    total += consume['cost']
+    if consume['date'] == current_date:
+      total += consume['cost']
   return total
 
 # ========== GET CONSUMPTION DATA FUNCTION =============
@@ -139,15 +140,14 @@ def registrationTab():
     lblTotal = Label(lblF1, text="Total Cost:", font=("Segoe UI", 10, "bold"))
     lblTotal.place(relx=0.7, rely=0.885)
     txtOverall = Entry(lblF1, font=("Segoe UI", 12), width=13)
-    txtOverall.insert(0, getTotalCost())
+    txtOverall.insert(0, getTotalCost(f"{dt.datetime.now():%m/%d/%Y}"))
     txtOverall.configure(state=tk.DISABLED)
     txtOverall.place(relx=0.81, rely=0.87)
 
 
     #Treeview
     tv = ttk.Treeview(lblF1)
-    current_date = f"{dt.datetime.now():%m/%d/%Y}"
-    getConsumptionData (tv, current_date)
+    getConsumptionData (tv, f"{dt.datetime.now():%m/%d/%Y}")
 
 def consumptionTab():
     lbltitle = Label(total, text="TRACK YOUR CONSUMPTION", font=("Segoe UI", 24, "underline"))
