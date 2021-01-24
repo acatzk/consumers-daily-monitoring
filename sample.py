@@ -3,6 +3,7 @@ from tkinter import ttk
 from tkinter import messagebox
 import tkinter as tk
 from tkcalendar import *
+import datetime as dt
 import json
 
 root = Tk()
@@ -72,7 +73,7 @@ def validation ():
   w = wattage.get()
   h = hour.get()
   r = rate.get()
-  if d == '' or (w == 0.00 or w == '') or (h == 0  or h ==  '')or (r == 0 or h == ''):
+  if d == '' or (w == 0.00 or w == '') or (h == 0  or h ==  '')or (r == 0.00 or h == ''):
     messagebox.showinfo("Title", "All fields required!")
     value = FALSE
   else:
@@ -105,10 +106,9 @@ def hometab():
 
 
 def registrationTab():
-    lbltitle = Label(registration, text="DEVICE REGISTRATION", font=("Segoe UI", 24, "underline"))
-    lbltitle.place(rely=0.02, relx=0.28)
-    # appliance = Label(registration, text ="Appliances:", font=("Segoe UI", 12))
-    # appliance.place(rely = 0.15, relx = 0.02)
+
+    Label(registration, text="DEVICE REGISTRATION", font=("Segoe UI", 24, "underline")).place(rely=0.02, relx=0.28)
+    Label(registration, text=f"Today is {dt.datetime.now(): %m/%d/%Y}", font=("Segoe UI", 20, "underline")).place(rely=0.09, relx=0.32)
 
     lblF1 = LabelFrame(registration, text="LIST OF APPLIANCES USED TODAY", font=("Segoe UI", 10, "underline"),
                      bg="#b5b5b5")
