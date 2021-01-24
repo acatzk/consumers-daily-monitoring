@@ -90,6 +90,10 @@ def autoUpdate (current_date, newData):
   tv = ttk.Treeview(lblF1)
   getConsumptionData (tv, current_date, newData)
   
+# function to add to JSON 
+def write_json(data, filename='consumptions.json'): 
+  with open(filename,'w') as f: 
+    json.dump(data, f, indent=4) 
 
 # ==== ON REGISTRATION DEVICE =====
 def onRegister ():
@@ -115,12 +119,14 @@ def onRegister ():
         current_data = data['consumptions'] # SELECT CURRENT DATA
         current_data.append(newData) # INSERT or APPEND NEW DATA
         #autoUpdate(current_date, newData) # AUTO UPDATE TREEVIEW DATA
+        # newData.update(current_data)
+        write_json(current_data)
         onCancel()
         print(current_data)  # PRINT UPDATE DATA IN CONSOLE
         messagebox.showinfo("New Data Inserted", newData)
 
-  except:
-    messagebox.showerror(title="Something went wrong!", message="Invalid inputs")
+  except ValueError as ve:
+    messagebox.showerror(title="Something went wrong!", message=ve)
 
 # ===== ON CANCEL REGISTRATION FIELDS ======
 def onCancel ():
