@@ -30,7 +30,6 @@ with open('consumptions.json') as c:
 # ========== INPUT VARAIBLES ==========
 device = StringVar()
 wattage = DoubleVar()
-hour = IntVar()
 hours = IntVar()
 minutes = IntVar()
 rate = DoubleVar()
@@ -44,7 +43,7 @@ def getTotalCost(current_date):
   return total
 
 # ========== GET CONSUMPTION DATA FUNCTION =============
-def getConsumptionData (tv, current_date):
+def getConsumptionData (tv, current_date, data):
   tv['columns'] = ("Wattage", "No. of Hours Used", "Cost")
 
   # Format Columns
@@ -58,7 +57,7 @@ def getConsumptionData (tv, current_date):
   tv.heading("Wattage", text="Wattage")
   tv.heading("No. of Hours Used", text="No. of Hours Used")
   tv.heading("Cost", text="Cost")
-  for consume in data['consumptions']:
+  for consume in data:
     if consume['date'] == current_date:
       tv.insert(parent='', 
                 index='end', 
@@ -75,14 +74,22 @@ def validation ():
   value = FALSE
   d = device.get()
   w = wattage.get()
-  h = hour.get()
+  h = hours.get()
+  m = minutes.get()
   r = rate.get()
-  if d == '' or (w == 0.00 or w == '') or (h == 0  or h ==  '')or (r == 0.00 or h == ''):
+  if d == '' or (w == 0.00 or w == '') or (h == 0  or h ==  '') or (m == '' or m == 0) or (r == 0.00 or r == ''):
     messagebox.showinfo("Title", "All fields required!")
     value = FALSE
   else:
     value = TRUE
   return value
+
+# =======  AUTO UPDATE NEWLY INSERTED DATA =====
+def autoUpdate (current_date, newData):
+  lblF1 = LabelFrame(registration, text="LIST OF APPLIANCES USED TODAY", font=("Segoe UI", 10, "underline"), bg="#b5b5b5")
+  tv = ttk.Treeview(lblF1)
+  getConsumptionData (tv, current_date, newData)
+  
 
 # ==== ON REGISTRATION DEVICE =====
 def onRegister ():
@@ -93,25 +100,24 @@ def onRegister ():
     h = hours.get()
     m = minutes.get()
     r = rate.get()
+    c = 0.0
 
     if validation():
-      time = {
-        "hours": h,
-        "minutes": m
-      }
-      data = {
-        "date": current_date,
-        "device": d,
-        "wattage": w,
-        "time": time,
-        "rate": r
+      time = { "hours": h, "minutes": m }
+      newData = {
+        "date": current_date, "device": d, "wattage": w,
+        "time": time, "rate": r, "cost": c
       }
 
-      if (m > 60):
+      if (m >= 60):
         messagebox.showerror(title="Something went wrong!", message="Beyond 60 minutes is absolutely invalid you dummy ass...")
       else:
-        print(data)
-        messagebox.showinfo("Title", "GOod job!!")
+        current_data = data['consumptions'] # SELECT CURRENT DATA
+        current_data.append(newData) # INSERT or APPEND NEW DATA
+        #autoUpdate(current_date, newData) # AUTO UPDATE TREEVIEW DATA
+        onCancel()
+        print(current_data)  # PRINT UPDATE DATA IN CONSOLE
+        messagebox.showinfo("New Data Inserted", newData)
 
   except:
     messagebox.showerror(title="Something went wrong!", message="Invalid inputs")
@@ -120,7 +126,8 @@ def onRegister ():
 def onCancel ():
   device.set('')
   wattage.set(0.0)
-  hour.set(0)
+  hours.set(0)
+  minutes.set(0)
   rate.set(0.0)
 
 
@@ -132,22 +139,26 @@ def hometab():
 def registrationTab():
 
     Label(registration, text="DEVICE REGISTRATION", font=("Segoe UI", 24, "underline")).place(rely=0.02, relx=0.28)
-    Label(registration, text=f"Today is{dt.datetime.now(): %m/%d/%Y}", font=("Segoe UI", 20, "underline")).place(rely=0.09, relx=0.32)
+    # Label(registration, text=f"Today is{dt.datetime.now(): %m/%d/%Y}", font=("Segoe UI", 20, "underline")).place(rely=0.09, relx=0.32)
 
     lblF1 = LabelFrame(registration, text="LIST OF APPLIANCES USED TODAY", font=("Segoe UI", 10, "underline"),
                      bg="#b5b5b5")
     lblF1.place(relwidth=0.96, relheight=0.57, relx=0.02, rely=0.40)
 
-    Label(registration, text="Device Name:", font=("Segoe UI", 10)).place(relx=0.02, rely=.2)
-    Label(registration, text="Wattage:", font=("Segoe UI", 10)).place(relx=0.32, rely=.2)
-    Label(registration, text="Hours Used:", font=("Segoe UI", 10)).place(relx=0.535, rely=.2)
+    Label(registration, text="Device Name:", font=("Segoe UI", 10)).place(relx=0.05, rely=.2)
+    Label(registration, text="Wattage:", font=("Segoe UI", 10)).place(relx=0.335, rely=.2)
+    Label(registration, text="Time:", font=("Segoe UI", 10)).place(relx=0.555, rely=.2)
+    Label(registration, text="HH", font=("Segoe UI", 8)).place(relx=0.61, rely=.165)
+    Label(registration, text="MM", font=("Segoe UI", 8)).place(relx=0.665, rely=.165)
+    Label(registration, text=":", font=("Segoe UI", 10)).place(relx=0.645, rely=.2)
     Label(registration, text="KWH Rate:", font=("Segoe UI", 10)).place(relx=0.75, rely=.2)
 
 
-    Entry(registration, textvar=device, font=("Segoe UI", 11), width=15).place(relx=0.14, rely=0.195)
-    Entry(registration, textvar=wattage, font=("Segoe UI", 12), width=10).place(relx=0.40, rely=0.195)
-    Entry(registration, textvar=hour, font=("Segoe UI", 12), width=8).place(relx=0.64, rely=0.195)
-    Entry(registration, textvar=rate, font=("Segoe UI", 12), width=10).place(relx=0.845, rely=0.195)
+    Entry(registration, textvar=device, font=("Segoe UI", 11), width=15).place(relx=0.15, rely=0.197)
+    Entry(registration, textvar=wattage, font=("Segoe UI", 12), width=10).place(relx=0.405, rely=0.197)
+    Entry(registration, textvar=hours, font=("Segoe UI", 12), width=3).place(relx=0.605, rely=0.197)
+    Entry(registration, textvar=minutes, font=("Segoe UI", 12), width=3).place(relx=0.66, rely=0.197)
+    Entry(registration, textvar=rate, font=("Segoe UI", 12), width=10).place(relx=0.845, rely=0.197)
 
     Button(registration, padx=2, pady=3, font=('arial', 12), width=6, text="SAVE", bd=2, bg="#b5b5b5", command=onRegister).place(relx=0.75, rely=0.31) # REGISTRATION BUTTON
     Button(registration, padx=2, pady=3, font=('arial', 12), width=6, text="CANCEL", bd=2, bg="#b5b5b5", command=onCancel).place(relx=0.85, rely=0.31) # CANCEL BUTTON
@@ -169,7 +180,8 @@ def registrationTab():
 
     #Treeview
     tv = ttk.Treeview(lblF1)
-    getConsumptionData (tv, f"{dt.datetime.now():%m/%d/%Y}")
+    tvData = data['consumptions']
+    getConsumptionData (tv, f"{dt.datetime.now():%m/%d/%Y}", tvData)
 
 def consumptionTab():
     lbltitle = Label(total, text="TRACK YOUR CONSUMPTION", font=("Segoe UI", 24, "underline"))
