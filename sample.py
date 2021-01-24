@@ -31,6 +31,8 @@ with open('consumptions.json') as c:
 device = StringVar()
 wattage = DoubleVar()
 hour = IntVar()
+hours = IntVar()
+minutes = IntVar()
 rate = DoubleVar()
 
 # ========== GET TOTAL COST FUNCTION =============
@@ -85,12 +87,32 @@ def validation ():
 # ==== ON REGISTRATION DEVICE =====
 def onRegister ():
   try:
+    current_date = f"{dt.datetime.now():%m/%d/%Y}"
     d = device.get()
     w = wattage.get()
-    h = hour.get()
+    h = hours.get()
+    m = minutes.get()
     r = rate.get()
+
     if validation():
-      messagebox.showinfo("Title", "GOod job!!")
+      time = {
+        "hours": h,
+        "minutes": m
+      }
+      data = {
+        "date": current_date,
+        "device": d,
+        "wattage": w,
+        "time": time,
+        "rate": r
+      }
+
+      if (m > 60):
+        messagebox.showerror(title="Something went wrong!", message="Beyond 60 minutes is absolutely invalid you dummy ass...")
+      else:
+        print(data)
+        messagebox.showinfo("Title", "GOod job!!")
+
   except:
     messagebox.showerror(title="Something went wrong!", message="Invalid inputs")
 
