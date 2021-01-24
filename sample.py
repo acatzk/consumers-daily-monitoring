@@ -41,7 +41,7 @@ def getTotalCost():
   return total
 
 # ========== GET CONSUMPTION DATA FUNCTION =============
-def getConsumptionData (tv):
+def getConsumptionData (tv, current_date):
   tv['columns'] = ("Wattage", "No. of Hours Used", "Cost")
 
   # Format Columns
@@ -56,13 +56,14 @@ def getConsumptionData (tv):
   tv.heading("No. of Hours Used", text="No. of Hours Used")
   tv.heading("Cost", text="Cost")
   for consume in data['consumptions']:
-    tv.insert(parent='', 
-              index='end', 
-              iid=consume, 
-              text=consume['device'], 
-              values=(consume['wattage'], 
-                      str(consume['time']['hours']) + ':' + str(consume['time']['minutes']), 
-                      "₱ " + str(consume['cost'])))
+    if consume['date'] == current_date:
+      tv.insert(parent='', 
+                index='end', 
+                iid=consume, 
+                text=consume['device'], 
+                values=(consume['wattage'], 
+                        str(consume['time']['hours']) + ':' + str(consume['time']['minutes']), 
+                        "₱ " + str(consume['cost'])))
   tv.place(relwidth=0.96, relheight=0.82, relx=0.02, rely=0.03)
   return tv
 
@@ -108,7 +109,7 @@ def hometab():
 def registrationTab():
 
     Label(registration, text="DEVICE REGISTRATION", font=("Segoe UI", 24, "underline")).place(rely=0.02, relx=0.28)
-    Label(registration, text=f"Today is {dt.datetime.now(): %m/%d/%Y}", font=("Segoe UI", 20, "underline")).place(rely=0.09, relx=0.32)
+    Label(registration, text=f"Today is{dt.datetime.now(): %m/%d/%Y}", font=("Segoe UI", 20, "underline")).place(rely=0.09, relx=0.32)
 
     lblF1 = LabelFrame(registration, text="LIST OF APPLIANCES USED TODAY", font=("Segoe UI", 10, "underline"),
                      bg="#b5b5b5")
@@ -145,7 +146,8 @@ def registrationTab():
 
     #Treeview
     tv = ttk.Treeview(lblF1)
-    getConsumptionData (tv)
+    current_date = f"{dt.datetime.now():%m/%d/%Y}"
+    getConsumptionData (tv, current_date)
 
 def consumptionTab():
     lbltitle = Label(total, text="TRACK YOUR CONSUMPTION", font=("Segoe UI", 24, "underline"))
