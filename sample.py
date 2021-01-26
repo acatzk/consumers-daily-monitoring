@@ -35,10 +35,10 @@ minutes = IntVar()
 rate = DoubleVar()
 
 # ========== GET TOTAL COST FUNCTION =============
-def getTotalCost(current_date):
+def getTotalCost():
   total = 0.00
   for consume in data['consumptions']:
-    if consume['date'] == current_date:
+    if consume['date'] == f"{dt.datetime.now():%m/%d/%Y}":
       total += consume['cost']
   return total
 
@@ -85,15 +85,15 @@ def validation ():
   return value
 
 # =======  AUTO UPDATE NEWLY INSERTED DATA =====
-def autoUpdate (current_date, newData):
+def autoUpdate (newData):
   lblF1 = LabelFrame(registration, text="LIST OF APPLIANCES USED TODAY", font=("Segoe UI", 10, "underline"), bg="#b5b5b5")
   tv = ttk.Treeview(lblF1)
-  getConsumptionData (tv, current_date, newData)
+  getConsumptionData (tv, f"{dt.datetime.now():%m/%d/%Y}", newData)
   
 # function to add to JSON 
 def write_json(data, filename='consumptions.json'): 
   with open(filename,'w') as f: 
-    json.dump(data, f, indent=4) 
+    json.dump({"consumptions": data}, f, indent=2) 
 
 # ==== ON REGISTRATION DEVICE =====
 def onRegister ():
@@ -104,13 +104,12 @@ def onRegister ():
     h = hours.get()
     m = minutes.get()
     r = rate.get()
-    c = 0.0
 
     if validation():
       time = { "hours": h, "minutes": m }
       newData = {
         "date": current_date, "device": d, "wattage": w,
-        "time": time, "rate": r, "cost": c
+        "time": time, "rate": r, "cost": 45
       }
 
       if (m >= 60):
@@ -118,10 +117,10 @@ def onRegister ():
       else:
         current_data = data['consumptions'] # SELECT CURRENT DATA
         current_data.append(newData) # INSERT or APPEND NEW DATA
-        #autoUpdate(current_date, newData) # AUTO UPDATE TREEVIEW DATA
+        #autoUpdate(newData) # AUTO UPDATE TREEVIEW DATA
         # newData.update(current_data)
-        write_json(current_data)
-        onCancel()
+        write_json(current_data) # UPLOAD DATA INTO JSON DATA
+        onCancel() # CLEAR ENTRY FIELDS
         print(current_data)  # PRINT UPDATE DATA IN CONSOLE
         messagebox.showinfo("New Data Inserted", newData)
 
@@ -179,7 +178,7 @@ def registrationTab():
     lblTotal = Label(lblF1, text="Total Cost:", font=("Segoe UI", 10, "bold"))
     lblTotal.place(relx=0.7, rely=0.885)
     txtOverall = Entry(lblF1, font=("Segoe UI", 12), width=13)
-    txtOverall.insert(0, getTotalCost(f"{dt.datetime.now():%m/%d/%Y}"))
+    txtOverall.insert(0, getTotalCost())
     txtOverall.configure(state=tk.DISABLED)
     txtOverall.place(relx=0.81, rely=0.87)
 
