@@ -84,16 +84,14 @@ def validation ():
     value = TRUE
   return value
 
-# =======  AUTO UPDATE NEWLY INSERTED DATA =====
-def auto_update (newData):
-  lblF1 = LabelFrame(registration, text="LIST OF APPLIANCES USED TODAY", font=("Segoe UI", 10, "underline"), bg="#b5b5b5")
-  tv = ttk.Treeview(lblF1)
-  get_consumption_data (tv, f"{dt.datetime.now():%m/%d/%Y}", newData)
-  
 # function to add to JSON 
 def write_json(data, filename='consumptions.json'): 
   with open(filename,'w') as f: 
     json.dump(data, f, indent=2) 
+
+# cost formula
+def cost_formula (watts, hours, minutes, rate):
+  return round(((watts / 1000) * (hours + (minutes/60)) * (rate)), 2)
 
 # ==== ON REGISTRATION DEVICE =====
 def on_register ():
@@ -104,8 +102,7 @@ def on_register ():
     h = hours.get()
     m = minutes.get()
     r = rate.get()
-    c = 45
-
+    c = cost_formula(w, h, m, r)
     if validation():
       time = { "hours": h, "minutes": m }
       newData = {
