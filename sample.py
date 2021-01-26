@@ -35,7 +35,7 @@ minutes = IntVar()
 rate = DoubleVar()
 
 # ========== GET TOTAL COST FUNCTION =============
-def getTotalCost():
+def get_total_cost():
   total = 0.00
   for consume in data['consumptions']:
     if consume['date'] == f"{dt.datetime.now():%m/%d/%Y}":
@@ -43,7 +43,7 @@ def getTotalCost():
   return total
 
 # ========== GET CONSUMPTION DATA FUNCTION =============
-def getConsumptionData (tv, current_date, data):
+def get_consumption_data (tv, current_date, data):
   tv['columns'] = ("Wattage", "No. of Hours Used", "Cost")
 
   # Format Columns
@@ -85,10 +85,10 @@ def validation ():
   return value
 
 # =======  AUTO UPDATE NEWLY INSERTED DATA =====
-def autoUpdate (newData):
+def auto_update (newData):
   lblF1 = LabelFrame(registration, text="LIST OF APPLIANCES USED TODAY", font=("Segoe UI", 10, "underline"), bg="#b5b5b5")
   tv = ttk.Treeview(lblF1)
-  getConsumptionData (tv, f"{dt.datetime.now():%m/%d/%Y}", newData)
+  get_consumption_data (tv, f"{dt.datetime.now():%m/%d/%Y}", newData)
   
 # function to add to JSON 
 def write_json(data, filename='consumptions.json'): 
@@ -96,7 +96,7 @@ def write_json(data, filename='consumptions.json'):
     json.dump({"consumptions": data}, f, indent=2) 
 
 # ==== ON REGISTRATION DEVICE =====
-def onRegister ():
+def on_register ():
   try:
     current_date = f"{dt.datetime.now():%m/%d/%Y}"
     d = device.get()
@@ -117,10 +117,10 @@ def onRegister ():
       else:
         current_data = data['consumptions'] # SELECT CURRENT DATA
         current_data.append(newData) # INSERT or APPEND NEW DATA
-        #autoUpdate(newData) # AUTO UPDATE TREEVIEW DATA
+        #auto_update(newData) # AUTO UPDATE TREEVIEW DATA
         # newData.update(current_data)
         write_json(current_data) # UPLOAD DATA INTO JSON DATA
-        onCancel() # CLEAR ENTRY FIELDS
+        on_cancel() # CLEAR ENTRY FIELDS
         print(current_data)  # PRINT UPDATE DATA IN CONSOLE
         messagebox.showinfo("New Data Inserted", newData)
 
@@ -128,7 +128,7 @@ def onRegister ():
     messagebox.showerror(title="Something went wrong!", message=ve)
 
 # ===== ON CANCEL REGISTRATION FIELDS ======
-def onCancel ():
+def on_cancel ():
   device.set('')
   wattage.set(0.0)
   hours.set(0)
@@ -136,12 +136,12 @@ def onCancel ():
   rate.set(0.0)
 
 
-def hometab():
+def home_tab():
     lblHome = Label(home,text="HOME", font=("Segoe UI", 40),relief="raised")
     lblHome.place(relx=0.5, rely=0.2)
 
 
-def registrationTab():
+def registration_tab():
 
     Label(registration, text="DEVICE REGISTRATION", font=("Segoe UI", 24, "underline")).place(rely=0.02, relx=0.28)
     # Label(registration, text=f"Today is{dt.datetime.now(): %m/%d/%Y}", font=("Segoe UI", 20, "underline")).place(rely=0.09, relx=0.32)
@@ -165,8 +165,8 @@ def registrationTab():
     Entry(registration, textvar=minutes, font=("Segoe UI", 12), width=3).place(relx=0.66, rely=0.197)
     Entry(registration, textvar=rate, font=("Segoe UI", 12), width=10).place(relx=0.845, rely=0.197)
 
-    Button(registration, padx=2, pady=3, font=('arial', 12), width=6, text="SAVE", bd=2, bg="#b5b5b5", command=onRegister).place(relx=0.75, rely=0.31) # REGISTRATION BUTTON
-    Button(registration, padx=2, pady=3, font=('arial', 12), width=6, text="CANCEL", bd=2, bg="#b5b5b5", command=onCancel).place(relx=0.85, rely=0.31) # CANCEL BUTTON
+    Button(registration, padx=2, pady=3, font=('arial', 12), width=6, text="SAVE", bd=2, bg="#b5b5b5", command=on_register).place(relx=0.75, rely=0.31) # REGISTRATION BUTTON
+    Button(registration, padx=2, pady=3, font=('arial', 12), width=6, text="CANCEL", bd=2, bg="#b5b5b5", command=on_cancel).place(relx=0.85, rely=0.31) # CANCEL BUTTON
 
     # Note
     lblNote = Label(registration,
@@ -178,7 +178,7 @@ def registrationTab():
     lblTotal = Label(lblF1, text="Total Cost:", font=("Segoe UI", 10, "bold"))
     lblTotal.place(relx=0.7, rely=0.885)
     txtOverall = Entry(lblF1, font=("Segoe UI", 12), width=13)
-    txtOverall.insert(0, getTotalCost())
+    txtOverall.insert(0, get_total_cost())
     txtOverall.configure(state=tk.DISABLED)
     txtOverall.place(relx=0.81, rely=0.87)
 
@@ -186,9 +186,9 @@ def registrationTab():
     #Treeview
     tv = ttk.Treeview(lblF1)
     tvData = data['consumptions']
-    getConsumptionData (tv, f"{dt.datetime.now():%m/%d/%Y}", tvData)
+    get_consumption_data (tv, f"{dt.datetime.now():%m/%d/%Y}", tvData)
 
-def consumptionTab():
+def consumption_tab():
     lbltitle = Label(total, text="TRACK YOUR CONSUMPTION", font=("Segoe UI", 24, "underline"))
     lbltitle.place(rely=0.028, relx=0.24)
     lblfrom = tk.Label(total, text="from:", font=("Segoe UI", 12))
@@ -257,12 +257,12 @@ def start ():
     root.minsize(width=1050, height=720)
 
     # end device registration
-    registrationTab()
+    registration_tab()
 
     # Track Consumption Tab
-    consumptionTab()
+    consumption_tab()
 
-    hometab()
+    home_tab()
 
 
 # application start
