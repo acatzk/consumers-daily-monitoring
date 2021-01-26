@@ -64,8 +64,8 @@ def get_consumption_data (tv, current_date, data):
                 iid=consume, 
                 text=consume['device'], 
                 values=(consume['wattage'], 
-                        str(consume['time']['hours']) + ':' + str(consume['time']['minutes']), 
-                        "₱ " + str(consume['cost'])))
+                    str(consume['time']['hours']) + ':' + str(consume['time']['minutes']), 
+             "₱ " + str(consume['cost'])))
   tv.place(relwidth=0.96, relheight=0.82, relx=0.02, rely=0.03)
   return tv
 
@@ -93,7 +93,7 @@ def auto_update (newData):
 # function to add to JSON 
 def write_json(data, filename='consumptions.json'): 
   with open(filename,'w') as f: 
-    json.dump({"consumptions": data}, f, indent=2) 
+    json.dump(data, f, indent=2) 
 
 # ==== ON REGISTRATION DEVICE =====
 def on_register ():
@@ -104,28 +104,40 @@ def on_register ():
     h = hours.get()
     m = minutes.get()
     r = rate.get()
+    c = 45
 
     if validation():
       time = { "hours": h, "minutes": m }
       newData = {
         "date": current_date, "device": d, "wattage": w,
-        "time": time, "rate": r, "cost": 45
+        "time": time, "rate": r, "cost": c
       }
 
       if (m >= 60):
-        messagebox.showerror(title="Something went wrong!", message="Beyond 60 minutes is absolutely invalid you dummy ass...")
+        messagebox.showwarning(title="Something went wrong!", message="Beyond 60 minutes is absolutely invalid you dummy ass...")
       else:
         current_data = data['consumptions'] # SELECT CURRENT DATA
         current_data.append(newData) # INSERT or APPEND NEW DATA
-        #auto_update(newData) # AUTO UPDATE TREEVIEW DATA
-        # newData.update(current_data)
-        write_json(current_data) # UPLOAD DATA INTO JSON DATA
+        # REFRESH DATA IN TREEVIEW
+        # auto_update(newData)
+        write_json({"consumptions": current_data})# UPLOAD DATA INTO JSON DATA
+        messagebox.showinfo("New Data Inserted",
+                            "\nDate: " + str(current_date) + "\n"
+                            "Device: " + str(d) + "\n"
+                            "Wattage: " + str(w) + "\n"
+                            "Time: " + str(h) + ":" + str(m) + "\n"
+                            "Rate: " + str(r) + "\n"
+                            "Cost: " + str(c))
         on_cancel() # CLEAR ENTRY FIELDS
-        print(current_data)  # PRINT UPDATE DATA IN CONSOLE
-        messagebox.showinfo("New Data Inserted", newData)
+        print({"consumptions": current_data})
 
-  except ValueError as ve:
-    messagebox.showerror(title="Something went wrong!", message=ve)
+  except ValueError:
+    messagebox.showerror(title="Something went wrong!", message="Oops!  That was no valid number.  Try again...")
+  except OSError as err:
+    messagebox.showerror(title="Something went wrong!", message="OS error: {0}".format(err))
+  except (RuntimeError, TypeError, NameError) as er:
+    messagebox.showerror(title="Something went wrong!", message="Run error: " + str(er))
+
 
 # ===== ON CANCEL REGISTRATION FIELDS ======
 def on_cancel ():
