@@ -1,114 +1,136 @@
 {
-	"consumptions": [
-		{
+  "consumptions": [
+    {
       "date": "01/2/2021",
-			"device": "Celphone",
-			"wattage": 5,
-			"time": {
+      "device": "Celphone",
+      "wattage": 5,
+      "time": {
         "hours": 9,
         "minutes": 25
       },
-			"rate": 12,
-			"cost": 0.9
-		},
-		{
+      "rate": 12,
+      "cost": 0.9
+    },
+    {
       "date": "01/2/2021",
-			"device": "Computer",
-			"wattage": 90,
-			"time": {
+      "device": "Computer",
+      "wattage": 90,
+      "time": {
         "hours": 3,
         "minutes": 12
       },
-			"rate": 8.47,
-			"cost": 5.33
-		},
-		{
+      "rate": 8.47,
+      "cost": 5.33
+    },
+    {
       "date": "01/2/2021",
-			"device": "Electricpan",
-			"wattage": 80,
-			"time": {
+      "device": "Electricpan",
+      "wattage": 80,
+      "time": {
         "hours": 6,
         "minutes": 45
       },
-			"rate": 12,
-			"cost": 3.45
-		},
-		{
+      "rate": 12,
+      "cost": 3.45
+    },
+    {
       "date": "01/2/2021",
-			"device": "LED",
-			"wattage": 11,
-			"time": {
+      "device": "LED",
+      "wattage": 11,
+      "time": {
         "hours": 6,
         "minutes": 3
       },
-			"rate": 12,
-			"cost": 3.00
+      "rate": 12,
+      "cost": 3.0
     },
     {
       "date": "01/3/2021",
-			"device": "Celphone",
-			"wattage": 5,
-			"time": {
+      "device": "Celphone",
+      "wattage": 5,
+      "time": {
         "hours": 8,
         "minutes": 32
       },
-			"rate": 12,
-			"cost": 0.9
-		},
-		{
+      "rate": 12,
+      "cost": 0.9
+    },
+    {
       "date": "01/3/2021",
-			"device": "Computer",
-			"wattage": 90,
-			"time": {
+      "device": "Computer",
+      "wattage": 90,
+      "time": {
         "hours": 5,
         "minutes": 5
       },
-			"rate": 8.47,
-			"cost": 5.33
-		},
-		{
-      "date": "01/24/2021",
-			"device": "Electricpan",
-			"wattage": 80,
-			"time": {
-        "hours": 7,
-        "minutes": 25
-      },
-			"rate": 12,
-			"cost": 3.45
-		},
-		{
-      "date": "01/24/2021",
-			"device": "LED",
-			"wattage": 11,
-			"time": {
-        "hours": 6,
-        "minutes": 45
-      },
-			"rate": 12,
-			"cost": 3.00
+      "rate": 8.47,
+      "cost": 5.33
     },
     {
       "date": "01/24/2021",
-			"device": "Celphone",
-			"wattage": 5,
-			"time": {
+      "device": "Electricpan",
+      "wattage": 80,
+      "time": {
+        "hours": 7,
+        "minutes": 25
+      },
+      "rate": 12,
+      "cost": 3.45
+    },
+    {
+      "date": "01/24/2021",
+      "device": "LED",
+      "wattage": 11,
+      "time": {
+        "hours": 6,
+        "minutes": 45
+      },
+      "rate": 12,
+      "cost": 3.0
+    },
+    {
+      "date": "01/24/2021",
+      "device": "Celphone",
+      "wattage": 5,
+      "time": {
         "hours": 9,
         "minutes": 25
       },
-			"rate": 12,
-			"cost": 0.9
-		},
-		{
+      "rate": 12,
+      "cost": 0.9
+    },
+    {
       "date": "01/24/2021",
-			"device": "Computer",
-			"wattage": 90,
-			"time": {
+      "device": "Computer",
+      "wattage": 90,
+      "time": {
         "hours": 3,
         "minutes": 12
       },
-			"rate": 8.47,
-			"cost": 5.33
-		}
-	]
+      "rate": 8.47,
+      "cost": 5.33
+    },
+    {
+      "date": "01/26/2021",
+      "device": "ba",
+      "wattage": 21.0,
+      "time": {
+        "hours": 2,
+        "minutes": 21
+      },
+      "rate": 21.0,
+      "cost": 45
+    },
+    {
+      "date": "01/26/2021",
+      "device": "oiui",
+      "wattage": 23.0,
+      "time": {
+        "hours": 2,
+        "minutes": 32
+      },
+      "rate": 25.0,
+      "cost": 45
+    }
+  ]
 }
