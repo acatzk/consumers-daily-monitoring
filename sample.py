@@ -57,6 +57,7 @@ def get_consumption_data (tv, current_date, data):
   tv.heading("Wattage", text="Wattage")
   tv.heading("No. of Hours Used", text="No. of Hours Used")
   tv.heading("Cost", text="Cost")
+  tv.place(relwidth=0.96, relheight=0.82, relx=0.02, rely=0.03)
   for consume in data:
     if consume['date'] == current_date:
       tv.insert(parent='', 
@@ -66,7 +67,6 @@ def get_consumption_data (tv, current_date, data):
                 values=(consume['wattage'], 
                     str(consume['time']['hours']) + ':' + str(consume['time']['minutes']), 
              "₱ " + str(consume['cost'])))
-  tv.place(relwidth=0.96, relheight=0.82, relx=0.02, rely=0.03)
   return tv
 
 # ===== BOOLEAN VALIDATION ======
@@ -118,8 +118,8 @@ def on_register ():
       else:
         current_data = data['consumptions'] # SELECT CURRENT DATA
         current_data.append(newData) # INSERT or APPEND NEW DATA
-        # REFRESH DATA IN TREEVIEW
-        # auto_update(newData)
+        print({"consumptions": current_data}) # PRINT UPDATED DATA IN CONSOLE
+        registration_tab() # AUTO REFRESH TREEVIEW
         write_json({"consumptions": current_data})# UPLOAD DATA INTO JSON DATA
         messagebox.showinfo("New Data Inserted",
                             "\nDate: " + str(current_date) + "\n"
@@ -127,9 +127,8 @@ def on_register ():
                             "Wattage: " + str(w) + "\n"
                             "Time: " + str(h) + ":" + str(m) + "\n"
                             "Rate: " + str(r) + "\n"
-                            "Cost: " + str(c))
+                            "Cost: " + str(c)) # SHOW NEWLY DATA INSERTED
         on_cancel() # CLEAR ENTRY FIELDS
-        print({"consumptions": current_data})
 
   except ValueError:
     messagebox.showerror(title="Something went wrong!", message="Oops!  That was no valid number.  Try again...")
@@ -137,7 +136,8 @@ def on_register ():
     messagebox.showerror(title="Something went wrong!", message="OS error: {0}".format(err))
   except (RuntimeError, TypeError, NameError) as er:
     messagebox.showerror(title="Something went wrong!", message="Run error: " + str(er))
-
+  except:
+    messagebox.showwarning(title="Something went wrong!", message="Opps!! Invalid inputs, it should be a number!")
 
 # ===== ON CANCEL REGISTRATION FIELDS ======
 def on_cancel ():
@@ -268,15 +268,17 @@ def start ():
     root.title("Consumer's Daily Electric Consumption Monitoring Software")
     root.minsize(width=1050, height=720)
 
-    # end device registration
+    # Home tab information
+    home_tab()
+
+    # Device Registration
     registration_tab()
 
     # Track Consumption Tab
     consumption_tab()
 
-    home_tab()
-
 
 # application start
-start()
-root.mainloop() 
+if __name__ == "__main__":
+  start()
+  root.mainloop()
