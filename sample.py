@@ -5,6 +5,7 @@ import tkinter as tk
 from tkcalendar import *
 import datetime as dt
 import json
+import uuid
 
 root = Tk()
 
@@ -40,7 +41,7 @@ def get_total_cost():
   for consume in data['consumptions']:
     if consume['date'] == f"{dt.datetime.now():%m/%d/%Y}":
       total += consume['cost']
-  return total
+  return round(total, 2)
 
 # ========== GET CONSUMPTION DATA FUNCTION =============
 def get_consumption_data (tv, current_date, data):
@@ -62,7 +63,7 @@ def get_consumption_data (tv, current_date, data):
     if consume['date'] == current_date:
       tv.insert(parent='', 
                 index='end', 
-                iid=consume, 
+                iid=consume['id'], 
                 text=consume['device'], 
                 values=(consume['wattage'], 
                     str(consume['time']['hours']) + ':' + str(consume['time']['minutes']), 
@@ -77,7 +78,7 @@ def validation ():
   h = hours.get()
   m = minutes.get()
   r = rate.get()
-  if d == '' or (w == 0.00 or w == '') or (h == 0  or h ==  '') or (m == '' or m == 0) or (r == 0.00 or r == ''):
+  if d == '' or (w == 0.00 or w == '') or (h == 0  or h ==  '') or (m == '') or (r == 0.00 or r == ''):
     messagebox.showinfo("Title", "All fields required!")
     value = FALSE
   else:
@@ -93,9 +94,11 @@ def write_json(data, filename='consumptions.json'):
 def cost_formula (watts, hours, minutes, rate):
   return round(((watts / 1000) * (hours + (minutes/60)) * (rate)), 2)
 
+
 # ==== ON REGISTRATION DEVICE =====
 def on_register ():
   try:
+    id = uuid.uuid1()
     current_date = f"{dt.datetime.now():%m/%d/%Y}"
     d = device.get()
     w = wattage.get()
@@ -106,7 +109,8 @@ def on_register ():
     if validation():
       time = { "hours": h, "minutes": m }
       newData = {
-        "date": current_date, "device": d, "wattage": w,
+        "id": id.hex, "date": current_date, 
+        "device": d, "wattage": w,
         "time": time, "rate": r, "cost": c
       }
 
@@ -136,6 +140,7 @@ def on_register ():
   except:
     messagebox.showwarning(title="Something went wrong!", message="Opps!! Invalid inputs, it should be a number!")
 
+
 # ===== ON CANCEL REGISTRATION FIELDS ======
 def on_cancel ():
   device.set('')
@@ -143,6 +148,26 @@ def on_cancel ():
   hours.set(0)
   minutes.set(0)
   rate.set(0.0)
+
+
+# ===== ON REMOVE DATA IN TREEVIEW & JSON FILE
+def on_remove (tv):
+  selected_id = tv.selection()
+  current_data = data['consumptions']
+  if (selected_id):
+    MsgBox = tk.messagebox.askquestion ('Are you sure','Do you want to delete?', icon = 'info')
+    if MsgBox == 'yes':
+      for newdata in current_data:
+        for id in selected_id:
+          if (newdata['id'] == id):
+            tv.delete(id)
+            # current_data(newdata) 
+            print("Deleted: " + str(newdata))
+      messagebox.showinfo(title="Successful", message="Successfully deleted!")
+    else:
+      return
+  else:
+    messagebox.showinfo(title="Opps!!", message="Please select item/s to delete")
 
 
 def home_tab():
@@ -159,6 +184,9 @@ def registration_tab():
                      bg="#b5b5b5")
     lblF1.place(relwidth=0.96, relheight=0.57, relx=0.02, rely=0.40)
 
+    #Treeview
+    tv = ttk.Treeview(lblF1)
+
     Label(registration, text="Device Name:", font=("Segoe UI", 10)).place(relx=0.05, rely=.2)
     Label(registration, text="Wattage:", font=("Segoe UI", 10)).place(relx=0.335, rely=.2)
     Label(registration, text="Time:", font=("Segoe UI", 10)).place(relx=0.555, rely=.2)
@@ -174,8 +202,9 @@ def registration_tab():
     Entry(registration, textvar=minutes, font=("Segoe UI", 12), width=3).place(relx=0.66, rely=0.197)
     Entry(registration, textvar=rate, font=("Segoe UI", 12), width=10).place(relx=0.845, rely=0.197)
 
-    Button(registration, padx=2, pady=3, font=('arial', 12), width=6, text="SAVE", bd=2, bg="#b5b5b5", command=on_register).place(relx=0.75, rely=0.31) # REGISTRATION BUTTON
-    Button(registration, padx=2, pady=3, font=('arial', 12), width=6, text="CANCEL", bd=2, bg="#b5b5b5", command=on_cancel).place(relx=0.85, rely=0.31) # CANCEL BUTTON
+    Button(registration, padx=2, pady=3, font=('arial', 12), width=6, text="Save", bd=2, bg="#b5b5b5", command=on_register).place(relx=0.75, rely=0.31) # REGISTRATION BUTTON
+    Button(registration, padx=2, pady=3, font=('arial', 12), width=9, text="Cancel", bd=2, bg="#b5b5b5", command=on_cancel).place(relx=0.85, rely=0.31) # CANCEL BUTTON
+    Button(lblF1, padx=2, pady=3, font=('arial', 11), width=20, text="Remove selected items", bd=2, bg="#b5b5b5", command=lambda:on_remove(tv)).place(relx=0.02, rely=0.87) # REMOVE DATA IN TREEVIEW & JSON
 
     # Note
     lblNote = Label(registration,
@@ -191,11 +220,9 @@ def registration_tab():
     txtOverall.configure(state=tk.DISABLED)
     txtOverall.place(relx=0.81, rely=0.87)
 
-
-    #Treeview
-    tv = ttk.Treeview(lblF1)
     tvData = data['consumptions']
     get_consumption_data (tv, f"{dt.datetime.now():%m/%d/%Y}", tvData)
+
 
 def consumption_tab():
     lbltitle = Label(total, text="TRACK YOUR CONSUMPTION", font=("Segoe UI", 24, "underline"))
@@ -257,7 +284,6 @@ def consumption_tab():
     # Add Data
     tv1.insert(parent='', index='end', iid=0, text='', values="")
     tv1.place(relwidth=0.96, relheight=0.8, relx=0.02, rely=0.03)
-
 
 
 # start method
