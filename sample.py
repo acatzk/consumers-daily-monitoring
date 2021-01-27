@@ -34,6 +34,9 @@ wattage = DoubleVar()
 hours = IntVar()
 minutes = IntVar()
 rate = DoubleVar()
+dateFrom = StringVar()
+dateTo = StringVar()
+totalCostByDate = 0.00
 
 # ========== GET TOTAL COST FUNCTION =============
 def get_total_cost():
@@ -41,7 +44,7 @@ def get_total_cost():
   for consume in data['consumptions']:
     if consume['date'] == f"{dt.datetime.now():%m/%d/%Y}":
       total += consume['cost']
-  return round(total, 2)
+  return "₱ " + str(round(total, 2))
 
 # ========== GET CONSUMPTION DATA FUNCTION =============
 def get_consumption_data (tv, current_date, data):
@@ -128,7 +131,7 @@ def on_register ():
                             "Wattage: " + str(w) + "\n"
                             "Time: " + str(h) + ":" + str(m) + "\n"
                             "Rate: " + str(r) + "\n"
-                            "Cost: " + str(c)) # SHOW NEWLY DATA INSERTED
+                            "Cost: ₱" + str(c)) # SHOW NEWLY DATA INSERTED
         on_cancel() # CLEAR ENTRY FIELDS
 
   except ValueError:
@@ -224,6 +227,37 @@ def registration_tab():
     get_consumption_data (tv, f"{dt.datetime.now():%m/%d/%Y}", tvData)
 
 
+def on_track_records (tv1, dfrom, dto):
+  df = str('{:02d}'.format(dfrom.get_date().month)) + "/" + str('{:02d}'.format(dfrom.get_date().day)) + "/" + str(dfrom.get_date().year)
+  dt = str('{:02d}'.format(dto.get_date().month)) + "/" + str('{:02d}'.format(dto.get_date().day)) + "/" + str(dto.get_date().year)
+  total_cost_by_date(df, dt)
+  on_clear_records(tv1)
+  for consume in data['consumptions']:
+    if (consume['date'] >= str(df)) and consume['date'] <= str(dt):
+      tv1.insert(parent='', 
+                index='end', 
+                iid=consume['id'], 
+                text=consume['date'], 
+                values=(consume['device'],
+                        consume['wattage'], 
+                    str(consume['time']['hours']) + ':' + str(consume['time']['minutes']), 
+             "₱ " + str(consume['cost'])))
+  return tv1
+
+def on_clear_records (tv1):
+  for record in tv1.get_children():
+    tv1.delete(record)
+  return tv1
+
+def total_cost_by_date (dfrom, dto):
+  total = 0.00
+  for consume in data['consumptions']:
+    if (consume['date'] >= str(dfrom)) and consume['date'] <= str(dto):
+      total += consume['cost']
+  print(total)
+  return total
+
+
 def consumption_tab():
     lbltitle = Label(total, text="TRACK YOUR CONSUMPTION", font=("Segoe UI", 24, "underline"))
     lbltitle.place(rely=0.028, relx=0.24)
@@ -235,13 +269,6 @@ def consumption_tab():
     lblto.place(relx=0.56, rely=0.16)
     dentto = DateEntry(total, front=('arial', 14, 'bold'), bd=5, width=25, borderwidth=2, date_pattern="mm/dd/yyyy")
     dentto.place(relx=0.61, rely=0.165)
-    # Track button
-    btntrack = Button(total, padx=3, pady=4, font=('arial', 12), width=10, text="TRACK", bd=2, bg="#b5b5b5")
-    btntrack.place(relx=0.355, rely=0.265)
-    # Clear Button
-    btnclear = Button(total, padx=3, pady=4, font=('arial', 12), width=10, text="CLEAR", bd=2, bg="#b5b5b5")
-    btnclear.place(relx=0.525, rely=0.265)
-
 
     # labelFrame2
     lblFresult = LabelFrame(total, text="RESULT", font=("Segoe UI", 10, "underline"), bg="#b5b5b5")
@@ -249,21 +276,33 @@ def consumption_tab():
     fr = Frame(lblFresult, bg="white")
     fr.place(relwidth=0.97, relheight=0.95, relx=0.015, rely=0.02)
 
+    #treeview
+    tv1 = ttk.Treeview(fr)
+
+        
+     # Track button
+    btntrack = Button(total, padx=3, pady=4, font=('arial', 12), width=10, text="TRACK", bd=2, bg="#b5b5b5", command=lambda:on_track_records(tv1, dentfrom, dentto))
+    btntrack.place(relx=0.355, rely=0.265)
+    # Clear Button
+    btnclear = Button(total, padx=3, pady=4, font=('arial', 12), width=10, text="CLEAR", bd=2, bg="#b5b5b5", command=lambda:on_clear_records(tv1))
+    btnclear.place(relx=0.525, rely=0.265)
+
     lbldays = tk.Label(fr, text="Total Days:", font=("Segoe UI", 12))
     lbldays.place(relx=0.02, rely=0.87)
     txtdays = Entry(fr, font=("Segoe UI", 12), width=12)
+    txtdays.insert(0, 0.00) # SHOW OVERALL TOTAL DAYS BY DATE
     txtdays.place(relx=0.155, rely=0.87)
     lblKWH = tk.Label(fr, text="Total KWH:", font=("Segoe UI", 12))
     lblKWH.place(relx=0.345, rely=0.87)
     txtKWH = Entry(fr, font=("Segoe UI", 12), width=12)
+    txtKWH.insert(0, 0.00) # SHOW OVERALL TOTAL KWH BY DATE
     txtKWH.place(relx=0.485, rely=0.87)
     lblcost = tk.Label(fr, text="Total Cost:", font=("Segoe UI", 12))
     lblcost.place(relx=0.675, rely=0.87)
-    txtcost = Entry(fr, font=("Segoe UI", 12), width=12)
-    txtcost.place(relx=0.815, rely=0.87)
+    txtCost = Entry(fr, font=("Segoe UI", 12), width=12)
+    txtCost.insert(0, total_cost_by_date) # SHOW OVERALL TOTAL COST BY DATE
+    txtCost.place(relx=0.815, rely=0.87)
 
-    #treeview
-    tv1 = ttk.Treeview(fr)
     # Define columns
     tv1['columns'] = ("Device/s", "Wattage", "No. of Hours Used", "Cost")
 
@@ -282,7 +321,6 @@ def consumption_tab():
     tv1.heading("Cost", text="Cost")
 
     # Add Data
-    tv1.insert(parent='', index='end', iid=0, text='', values="")
     tv1.place(relwidth=0.96, relheight=0.8, relx=0.02, rely=0.03)
 
 
