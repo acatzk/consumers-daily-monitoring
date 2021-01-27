@@ -227,6 +227,7 @@ def registration_tab():
     get_consumption_data (tv, f"{dt.datetime.now():%m/%d/%Y}", tvData)
 
 
+# ON TRACK RECORDS BY DATE
 def on_track_records (tv1, dfrom, dto):
   df = str('{:02d}'.format(dfrom.get_date().month)) + "/" + str('{:02d}'.format(dfrom.get_date().day)) + "/" + str(dfrom.get_date().year)
   dt = str('{:02d}'.format(dto.get_date().month)) + "/" + str('{:02d}'.format(dto.get_date().day)) + "/" + str(dto.get_date().year)
@@ -244,11 +245,15 @@ def on_track_records (tv1, dfrom, dto):
              "₱ " + str(consume['cost'])))
   return tv1
 
+
+# CLEAR TREEVIEW RECORDS
 def on_clear_records (tv1):
   for record in tv1.get_children():
     tv1.delete(record)
   return tv1
 
+
+# GET COST BY DATE
 def total_cost_by_date (dfrom, dto):
   total = 0.00
   for consume in data['consumptions']:
@@ -300,7 +305,7 @@ def consumption_tab():
     lblcost = tk.Label(fr, text="Total Cost:", font=("Segoe UI", 12))
     lblcost.place(relx=0.675, rely=0.87)
     txtCost = Entry(fr, font=("Segoe UI", 12), width=12)
-    txtCost.insert(0, total_cost_by_date) # SHOW OVERALL TOTAL COST BY DATE
+    txtCost.insert(0, total_cost_by_date(dentfrom, dentto)) # SHOW OVERALL TOTAL COST BY DATE
     txtCost.place(relx=0.815, rely=0.87)
 
     # Define columns
