@@ -228,11 +228,12 @@ def registration_tab():
 
 
 # ON TRACK RECORDS BY DATE
-def on_track_records (tv1, dfrom, dto, txtCost, txtKWH):
+def on_track_records (tv1, dfrom, dto, txtCost, txtKWH, txtdevice):
   df = str('{:02d}'.format(dfrom.get_date().month)) + "/" + str('{:02d}'.format(dfrom.get_date().day)) + "/" + str(dfrom.get_date().year)
   dt = str('{:02d}'.format(dto.get_date().month)) + "/" + str('{:02d}'.format(dto.get_date().day)) + "/" + str(dto.get_date().year)
-  total_cost_and_kwh_by_date(df, dt, txtCost, txtKWH)
-  on_clear_records(tv1)
+  total_data_by_date(tv1, df, dt, txtCost, txtKWH, txtdevice)
+  for record in tv1.get_children():
+    tv1.delete(record)
   for consume in data['consumptions']:
     if (consume['date'] >= str(df)) and consume['date'] <= str(dt):
       tv1.insert(parent='', 
@@ -243,18 +244,26 @@ def on_track_records (tv1, dfrom, dto, txtCost, txtKWH):
                         consume['wattage'], 
                     str(consume['time']['hours']) + ':' + str(consume['time']['minutes']), 
              "₱ " + str(consume['cost'])))
+  txtdevice.delete(0,END)
+  td = len(tv1.get_children())
+  td = list(str(td))
+  txtdevice.insert(0,max(td))
   return tv1
 
 
 # CLEAR TREEVIEW RECORDS
-def on_clear_records (tv1):
+def on_clear_records (tv1,txtCost,txtdevice,txtKWH):
   for record in tv1.get_children():
     tv1.delete(record)
+
+  txtKWH.delete(0,END)
+  txtCost.delete(0,END)
+  txtdevice.delete(0,END)
   return tv1
 
 
-# GET COST BY DATE
-def total_cost_and_kwh_by_date (dfrom, dto, txtCost, txtKWH):
+# GET TOTAL DAYS, KWH AND COST BY DATE
+def total_data_by_date (tv1, dfrom, dto, txtCost, txtKWH, txtdevice):
   totalCost = 0.00
   totalKWH = 0.00
   txtKWH.delete(0,END)
@@ -263,11 +272,11 @@ def total_cost_and_kwh_by_date (dfrom, dto, txtCost, txtKWH):
   for consume in data['consumptions']:
     if (consume['date'] >= str(dfrom)) and consume['date'] <= str(dto):
       totalCost += consume['cost']
-      totalKWH += ((consume['wattage']/1000) * ((consume['time']['hours']) + ((consume['time']['minutes']) / 60)))
+      totalKWH += ((consume['wattage'] / 1000) * ((consume['time']['hours']) + ((consume['time']['minutes']) / 60)))
+
   txtCost.insert(0,"₱ " + str(round(totalCost, 2)))
   txtKWH.insert(0, str(round(totalKWH, 2)))
-  return totalCost, totalKWH
-
+  return
 
 def consumption_tab():
     lbltitle = Label(total, text="TRACK YOUR CONSUMPTION", font=("Segoe UI", 24, "underline"))
@@ -290,24 +299,24 @@ def consumption_tab():
     #treeview
     tv1 = ttk.Treeview(fr)
 
-        
-     # Track button
-    btntrack = Button(total, padx=3, pady=4, font=('arial', 12), width=10, text="TRACK", bd=2, bg="#b5b5b5", command=lambda:on_track_records(tv1, dentfrom, dentto, txtCost, txtKWH))
+
+    # Track button
+    btntrack = Button(total, padx=3, pady=4, font=('arial', 12), width=10, text="TRACK", bd=2, bg="#b5b5b5", command=lambda:on_track_records(tv1, dentfrom, dentto, txtCost, txtKWH, txtdevice))
     btntrack.place(relx=0.355, rely=0.265)
     # Clear Button
-    btnclear = Button(total, padx=3, pady=4, font=('arial', 12), width=10, text="CLEAR", bd=2, bg="#b5b5b5", command=lambda:on_clear_records(tv1))
+    btnclear = Button(total, padx=3, pady=4, font=('arial', 12), width=10, text="CLEAR", bd=2, bg="#b5b5b5", command=lambda:on_clear_records(tv1,txtCost,txtdevice,txtKWH))
     btnclear.place(relx=0.525, rely=0.265)
 
-    lbldays = tk.Label(fr, text="Total Days:", font=("Segoe UI", 12))
-    lbldays.place(relx=0.02, rely=0.87)
-    txtdays = Entry(fr, font=("Segoe UI", 12), width=12)
-    txtdays.place(relx=0.155, rely=0.87)
+    lbldevice = tk.Label(fr, text="Total Device:", font=("Segoe UI", 12))
+    lbldevice.place(relx=0.02, rely=0.87)
+    txtdevice = Entry(fr, font=("Segoe UI", 12), width=12)
+    txtdevice.place(relx=0.155, rely=0.87)
     lblKWH = tk.Label(fr, text="Total KWH:", font=("Segoe UI", 12))
-    lblKWH.place(relx=0.345, rely=0.87)
+    lblKWH.place(relx=0.36, rely=0.87)
     txtKWH = Entry(fr, font=("Segoe UI", 12), width=12)
     txtKWH.place(relx=0.485, rely=0.87)
     lblcost = tk.Label(fr, text="Total Cost:", font=("Segoe UI", 12))
-    lblcost.place(relx=0.675, rely=0.87)
+    lblcost.place(relx=0.69, rely=0.87)
     txtCost = Entry(fr, font=("Segoe UI", 12), width=12)
     txtCost.place(relx=0.815, rely=0.87)
 
