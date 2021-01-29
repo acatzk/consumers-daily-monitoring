@@ -107,6 +107,150 @@
       },
       "rate": 12.0,
       "cost": 1.73
+    },
+    {
+      "id": "1151e43861dc11ebb4b1fb92b0a07ec6",
+      "date": "01/29/2021",
+      "device": "fasdf",
+      "wattage": 21.0,
+      "time": {
+        "hours": 21,
+        "minutes": 21
+      },
+      "rate": 21.0,
+      "cost": 9.42
+    },
+    {
+      "id": "1654fa9261dc11ebb4b1fb92b0a07ec6",
+      "date": "01/29/2021",
+      "device": "bab",
+      "wattage": 33.0,
+      "time": {
+        "hours": 5,
+        "minutes": 3
+      },
+      "rate": 2.0,
+      "cost": 0.33
+    },
+    {
+      "id": "2885643661dc11ebb4b1fb92b0a07ec6",
+      "date": "01/29/2021",
+      "device": "mo",
+      "wattage": 21.0,
+      "time": {
+        "hours": 12,
+        "minutes": 3
+      },
+      "rate": 12.0,
+      "cost": 3.04
+    },
+    {
+      "id": "2fe9c7b261dc11ebb4b1fb92b0a07ec6",
+      "date": "01/29/2021",
+      "device": "dk",
+      "wattage": 30.0,
+      "time": {
+        "hours": 12,
+        "minutes": 52
+      },
+      "rate": 12.0,
+      "cost": 4.63
+    },
+    {
+      "id": "33f3ce2a61dc11ebb4b1fb92b0a07ec6",
+      "date": "01/29/2021",
+      "device": "dhfrg",
+      "wattage": 21.0,
+      "time": {
+        "hours": 12,
+        "minutes": 12
+      },
+      "rate": 12.0,
+      "cost": 3.07
+    },
+    {
+      "id": "380b6a7261dc11ebb4b1fb92b0a07ec6",
+      "date": "01/29/2021",
+      "device": "asdfhhs",
+      "wattage": 121.0,
+      "time": {
+        "hours": 2,
+        "minutes": 2
+      },
+      "rate": 12.0,
+      "cost": 2.95
+    },
+    {
+      "id": "3ba8c69861dc11ebb4b1fb92b0a07ec6",
+      "date": "01/29/2021",
+      "device": "fasdf",
+      "wattage": 321.0,
+      "time": {
+        "hours": 3,
+        "minutes": 2
+      },
+      "rate": 21.0,
+      "cost": 20.45
+    },
+    {
+      "id": "3f0ccb9061dc11ebb4b1fb92b0a07ec6",
+      "date": "01/29/2021",
+      "device": "asdf",
+      "wattage": 21.0,
+      "time": {
+        "hours": 212,
+        "minutes": 2
+      },
+      "rate": 2.0,
+      "cost": 8.91
+    },
+    {
+      "id": "496256f061dc11ebb4b1fb92b0a07ec6",
+      "date": "01/29/2021",
+      "device": "asdf",
+      "wattage": 21.0,
+      "time": {
+        "hours": 2,
+        "minutes": 2
+      },
+      "rate": 2.0,
+      "cost": 0.09
+    },
+    {
+      "id": "4c37a61e61dc11ebb4b1fb92b0a07ec6",
+      "date": "01/29/2021",
+      "device": "sadfasdf",
+      "wattage": 21.0,
+      "time": {
+        "hours": 2,
+        "minutes": 2
+      },
+      "rate": 212.0,
+      "cost": 9.05
+    },
+    {
+      "id": "513d258061dc11ebb4b1fb92b0a07ec6",
+      "date": "01/29/2021",
+      "device": "asdf",
+      "wattage": 21.0,
+      "time": {
+        "hours": 2,
+        "minutes": 2
+      },
+      "rate": 2.0,
+      "cost": 0.09
+    },
+    {
+      "id": "5648e17261dc11ebb4b1fb92b0a07ec6",
+      "date": "01/29/2021",
+      "device": "ffff",
+      "wattage": 2.0,
+      "time": {
+        "hours": 2,
+        "minutes": 2
+      },
+      "rate": 12.0,
+      "cost": 0.05
     }
   ]
 }
