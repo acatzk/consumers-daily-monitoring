@@ -167,6 +167,7 @@ def on_remove (tv):
             current_data = data['consumptions'] # SELECT CURRENT DATA
             current_data.remove(newdata) # INSERT or APPEND NEW DATA
             write_json({"consumptions": current_data})# UPLOAD DATA INTO JSON DATA
+            registration_tab()
       messagebox.showinfo(title="Successful", message="Successfully deleted!")
     else:
       return
