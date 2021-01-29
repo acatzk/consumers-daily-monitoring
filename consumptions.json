@@ -59,6 +59,30 @@
       },
       "rate": 12.0,
       "cost": 0.38
+    },
+    {
+      "id": "7e5f1538614511eb9c3c11474b3d5af9",
+      "date": "01/28/2021",
+      "device": "electripan",
+      "wattage": 18.0,
+      "time": {
+        "hours": 20,
+        "minutes": 0
+      },
+      "rate": 12.0,
+      "cost": 4.32
+    },
+    {
+      "id": "233e4f7a61d611ebb4b1fb92b0a07ec6",
+      "date": "01/29/2021",
+      "device": "cp",
+      "wattage": 5.0,
+      "time": {
+        "hours": 8,
+        "minutes": 30
+      },
+      "rate": 12.0,
+      "cost": 0.51
     }
   ]
 }
