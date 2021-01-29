@@ -163,9 +163,10 @@ def on_remove (tv):
       for newdata in current_data:
         for id in selected_id:
           if (newdata['id'] == id):
-            tv.delete(id)
-            # current_data(newdata) 
-            print("Deleted: " + str(newdata))
+            tv.delete(id)           
+            current_data = data['consumptions'] # SELECT CURRENT DATA
+            current_data.remove(newdata) # INSERT or APPEND NEW DATA
+            write_json({"consumptions": current_data})# UPLOAD DATA INTO JSON DATA
       messagebox.showinfo(title="Successful", message="Successfully deleted!")
     else:
       return
