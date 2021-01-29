@@ -248,8 +248,7 @@ def on_track_records (tv1, dfrom, dto, txtCost, txtKWH, txtdevice):
              "₱ " + str(consume['cost'])))
   txtdevice.delete(0,END)
   td = len(tv1.get_children())
-  td = list(str(td))
-  txtdevice.insert(0,max(td))
+  txtdevice.insert(0, td)
   return tv1
 
 
