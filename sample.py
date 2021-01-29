@@ -69,7 +69,7 @@ def get_consumption_data (tv, current_date, data):
                 iid=consume['id'], 
                 text=consume['device'], 
                 values=(consume['wattage'], 
-                    str(consume['time']['hours']) + ':' + str(consume['time']['minutes']), 
+                    str(consume['time']['hours']) + ':' + str('{:02d}'.format(consume['time']['minutes'])), 
              "₱ " + str(consume['cost'])))
   return tv
 
@@ -244,7 +244,7 @@ def on_track_records (tv1, dfrom, dto, txtCost, txtKWH, txtdevice):
                 text=consume['date'], 
                 values=(consume['device'],
                         consume['wattage'], 
-                    str(consume['time']['hours']) + ':' + str(consume['time']['minutes']), 
+                    str(consume['time']['hours']) + ':' + str('{:02d}'.format(consume['time']['minutes'])), 
              "₱ " + str(consume['cost'])))
   txtdevice.delete(0,END)
   td = len(tv1.get_children())

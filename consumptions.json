@@ -83,6 +83,30 @@
       },
       "rate": 12.0,
       "cost": 0.51
+    },
+    {
+      "id": "1fb4eb9261d711ebb4b1fb92b0a07ec6",
+      "date": "01/29/2021",
+      "device": "battery",
+      "wattage": 3.0,
+      "time": {
+        "hours": 9,
+        "minutes": 0
+      },
+      "rate": 12.0,
+      "cost": 0.32
+    },
+    {
+      "id": "64f282f061d711ebb4b1fb92b0a07ec6",
+      "date": "01/29/2021",
+      "device": "device",
+      "wattage": 12.0,
+      "time": {
+        "hours": 12,
+        "minutes": 0
+      },
+      "rate": 12.0,
+      "cost": 1.73
     }
   ]
 }
